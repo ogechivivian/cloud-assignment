@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-assignment-deployment
+  labels:
+    app: cloud-assignment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-assignment
+  template:
+    metadata:
+      labels:
+        app: cloud-assignment
+    spec:
+      containers:
+        - name: cloud-assignment
+          image: ogechi/cloud-assignment:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
