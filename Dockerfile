@@ -4,7 +4,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
 
 # Copying files to the build container
-COPY ../cloud-assignment ./
+#COPY ../cloud-assignment ./
+COPY . ./
+
 
 # Restore nuget packages
 RUN dotnet restore
