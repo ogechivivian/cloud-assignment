@@ -89,8 +89,19 @@ jobs:
       #Deploy to EKS
       - name: Deploy to EKS
         run: |
+          # Apply Deployment and Service manifests
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+
           # Update the image in the deployment
           kubectl set image deployment/cloud-assignment-deployment cloud-assignment=${{ secrets.DOCKER_USERNAME }}/cloud-assignment:${{ github.sha }}
 
           # Wait for the deployment to complete
           kubectl rollout status deployment/cloud-assignment-deployment
+          
+          # Check if the deployment was successful
+            if ! kubectl rollout status deployment/cloud-assignment-deployment; then
+              echo "Deployment failed, rolling back..."
+              kubectl rollout undo deployment/cloud-assignment-deployment
+              exit 1
+            fi
