@@ -105,3 +105,6 @@ jobs:
               kubectl rollout undo deployment/cloud-assignment-deployment
               exit 1
             fi
+      - name: Apply HPA for Frontend
+        run: |
+          kubectl apply -f k8s/hpa.yml
