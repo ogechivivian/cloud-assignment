@@ -16,7 +16,7 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
 #  Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:2.2 AS runtime
 WORKDIR /app
 
 # Copying only the published output from the build stage
