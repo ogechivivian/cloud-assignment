@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace aspnet_core_dotnet_core
 {
@@ -20,36 +16,65 @@ namespace aspnet_core_dotnet_core
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Register services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure Cookie Policy
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Add Controllers with Views
+            services.AddControllersWithViews();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // Optional: Add Razor Pages
+            // services.AddRazorPages();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        // Configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
+                // Developer exception page for debugging
                 app.UseDeveloperExceptionPage();
             }
             else
             {
+                // Production exception handler
                 app.UseExceptionHandler("/Error");
+                // Enforce HTTPS in production
+                app.UseHsts();
             }
 
+            // Redirect HTTP to HTTPS
+            app.UseHttpsRedirection();
+
+            // Serve static files from wwwroot
             app.UseStaticFiles();
+
+            // Apply Cookie Policy
             app.UseCookiePolicy();
 
-            app.UseMvc();
+            // Enable Routing
+            app.UseRouting();
+
+            // Apply Authorization
+            app.UseAuthorization();
+
+            // Configure Endpoints
+            app.UseEndpoints(endpoints =>
+            {
+                // Default route: {controller=Home}/{action=Index}/{id?}
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // Optional: Map Razor Pages
+                // endpoints.MapRazorPages();
+            });
         }
     }
 }
