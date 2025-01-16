@@ -22,4 +22,4 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Start the application by default
-ENTRYPOINT [ "dotnet", "CloudAssignment.dll" ]
+ENTRYPOINT [ "dotnet", "aspnet-core-dotnet-core.dll" ]
