@@ -1,6 +1,7 @@
 
 #Build stage
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+#FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim  AS build
 WORKDIR /app
 
 # Copying files to the build container
